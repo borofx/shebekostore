@@ -1,0 +1,51 @@
+<section>
+  <h2>{{ section.settings.heading }}</h2>
+
+  {% if section.settings.criteria.size == 0 %}
+    <p><b>ГРЕШКА:</b> няма избрани критерии</p>
+  {% endif %}
+
+  <h3>Критерии</h3>
+  <ul>
+    {% for c in section.settings.criteria %}
+      <li>{{ c.label.value }} | {{ c.metafield_key.value }} | {{ c.comparison.value }} | {{ c.unit.value }}</li>
+    {% endfor %}
+  </ul>
+
+  <h3>Продукти в {{ collection.title }} ({{ collection.products_count }})</h3>
+  {% for product in collection.products %}
+    <p>
+      <b>{{ product.title }}</b> [{{ product.type }}]<br>
+      {% for criterion in section.settings.criteria %}
+        {% assign metafield_path = criterion.metafield_key.value | split: '.' %}
+        {% assign metafield_namespace = metafield_path[0] %}
+        {% assign metafield_key = metafield_path[1] %}
+        {% assign metafield = product.metafields[metafield_namespace][metafield_key] %}
+        {{ criterion.label.value }}:
+        {% if metafield == blank %}
+          <i>липсва</i>
+        {% else %}
+          {{ metafield.value }}
+        {% endif %}
+
+        {% unless forloop.last %} · {% endunless %}
+      {% endfor %}
+    </p>
+  {% endfor %}
+</section>
+
+{% schema %}
+{
+  "name": "Product compare",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Сравни" },
+    {
+      "type": "metaobject_list",
+      "id": "criteria",
+      "label": "Comparison criteria",
+      "metaobject_type": "compare_criteria"
+    }
+  ],
+  "presets": [{ "name": "Product compare" }]
+}
+{% endschema %}
