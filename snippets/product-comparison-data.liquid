@@ -3,9 +3,9 @@
     "criteria": [
       {% for criterion in criteria %}
         {
-          "label": {{ criterion.label.value | json }}
-          "key": {{ criterion.metafield_key.value | json }}
-          "comparison": {{ criterion.comparison.value | json }}
+          "label": {{ criterion.label.value | json }},
+          "key": {{ criterion.metafield_key.value | json }},
+          "comparison": {{ criterion.comparison.value | json }},
           "unit": {{ criterion.unit.value | json }}
         }{% unless forloop.last %}, {% endunless %}
       {% endfor %}
@@ -13,9 +13,9 @@
     "products": [
       {% for product in collection.products %}
         {
-          "id": {{ product.id | json }}
-          "title": {{ product.id | json }}
-          "type": {{ product.type | json }}
+          "id": {{ product.id | json }},
+          "title": {{ product.title | json }},
+          "type": {{ product.type | json }},
           "values":{
             {% for criterion in criteria %}
               {% assign path = criterion.metafield_key.value | split: '.' %}
@@ -23,7 +23,7 @@
               {% assign key = path[1] %}
               {% assign metafield = product.metafields[namespace][key] %}
 
-              {{ criterion.metafield_key.value | json }}
+              {{ criterion.metafield_key.value | json }}:
               {% if metafield == blank %}
                 null
               {% else %}
@@ -32,7 +32,7 @@
               {% unless forloop.last %},{% endunless %}
             {% endfor %}
           }
-        }
+        }{% unless forloop.last %},{% endunless %}
       {% endfor %}
     ]
   }
