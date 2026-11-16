@@ -1,7 +1,7 @@
 <script type="application/json" id="comparison-data-{{ section.id }}">
   {
     "criteria": [
-      {% for criterion in section.settings.criteria %}
+      {% for criterion in criteria %}
         {
           "label": {{ criterion.label.value | json }}
           "key": {{ criterion.metafield_key.value | json }}
@@ -17,7 +17,7 @@
           "title": {{ product.id | json }}
           "type": {{ product.type | json }}
           "values":{
-            {% for criterion in section.settings.criteria %}
+            {% for criterion in criteria %}
               {% assign path = criterion.metafield_key.value | split: '.' %}
               {% assign namespace = path[0] %}
               {% assign key = path[1] %}

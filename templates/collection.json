@@ -250,11 +250,7 @@
       "name": "Product compare",
       "settings": {
         "heading": "Сравни",
-        "criteria": [
-          "height",
-          "weight",
-          "softness"
-        ]
+        "criteria_group": "{{ collection.metafields.custom.compare_criteria_group.value }}"
       }
     }
   },
