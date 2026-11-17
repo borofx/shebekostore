@@ -39,7 +39,17 @@
   {% endfor %}
 </section>
 
-{% render 'product-comparison-data', section: section, collection: collection, criteria: criteria %}
+<product-compare>
+  <label for="product-1-{{ section.id }}">Продукт 1</label>
+  <select id="product-1-{{ section.id }}"></select>
+
+  {% render 'product-comparison-data', section: section, collection: collection, criteria: criteria %}
+</product-compare>
+
+<script
+  src="{{ 'product-compare.js' | asset_url }}"
+  type="module"
+></script>
 
 {% schema %}
 {
