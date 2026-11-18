@@ -7,10 +7,10 @@
   <h2>{{ section.settings.heading }}</h2>
 
   {% if criteria == blank %}
-    <p><b>ГРЕШКА:</b> няма избрани критерии</p>
+    <p><b>{{ 'product_comparison.error_label' | t }}</b> {{ 'product_comparison.no_criteria' | t }}</p>
   {% endif %}
 
-  <h3>Критерии</h3>
+  <h3>{{ 'product_comparison.criteria_heading' | t }}</h3>
   <ul>
     {% for c in criteria %}
       <li>{{ c.label.value }} | {{ c.metafield_key.value }} | {{ c.comparison.value }} | {{ c.unit.value }}</li>
@@ -28,7 +28,7 @@
         {% assign metafield = product.metafields[metafield_namespace][metafield_key] %}
         {{ criterion.label.value }}:
         {% if metafield == blank %}
-          <i>липсва</i>
+          <i>{{ 'product_comparison.missing_value' | t }}</i>
         {% else %}
           {{ metafield.value }}
         {% endif %}
@@ -39,7 +39,19 @@
   {% endfor %}
 </section>
 
-{% render 'product-comparison-data', section: section, collection: collection, criteria: criteria %}
+<product-compare>
+  <label for="product-1-{{ section.id }}">
+    {{ 'product_comparison.product_one' | t }}
+  </label>
+  <select id="product-1-{{ section.id }}"></select>
+
+  {% render 'product-comparison-data', section: section, collection: collection, criteria: criteria %}
+</product-compare>
+
+<script
+  src="{{ 'product-compare.js' | asset_url }}"
+  type="module"
+></script>
 
 {% schema %}
 {
