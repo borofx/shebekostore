@@ -8,6 +8,13 @@
  * ------------------------------------------------------------
  */
 {
+  "product_comparison": {
+    "product_one": "Product 1",
+    "criteria_heading": "Criteria",
+    "error_label": "Error:",
+    "no_criteria": "No comparison criteria configured.",
+    "missing_value": "Missing value"
+  },
   "accessibility": {
     "account": "Account",
     "active_filters": "Active filters:",
