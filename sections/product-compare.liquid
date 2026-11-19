@@ -7,17 +7,17 @@
   <h2>{{ section.settings.heading }}</h2>
 
   {% if criteria == blank %}
-    <p><b>{{ 'product_comparison.error_label' | t }}</b> {{ 'product_comparison.no_criteria' | t }}</p>
+    <p><b>{{ section.settings.error_label | escape }}</b> {{ section.settings.no_criteria | escape }}</p>
   {% endif %}
 
-  <h3>{{ 'product_comparison.criteria_heading' | t }}</h3>
+  <h3>{{ section.settings.criteria_heading | escape }}</h3>
   <ul>
     {% for c in criteria %}
       <li>{{ c.label.value }} | {{ c.metafield_key.value }} | {{ c.comparison.value }} | {{ c.unit.value }}</li>
     {% endfor %}
   </ul>
 
-  <h3>Продукти в {{ collection.title }} ({{ collection.products_count }})</h3>
+  <h3>{{ collection.title }} ({{ collection.products_count }})</h3>
   {% for product in collection.products %}
     <p>
       <b>{{ product.title }}</b> [{{ product.type }}]<br>
@@ -28,7 +28,7 @@
         {% assign metafield = product.metafields[metafield_namespace][metafield_key] %}
         {{ criterion.label.value }}:
         {% if metafield == blank %}
-          <i>{{ 'product_comparison.missing_value' | t }}</i>
+          <i>{{ section.settings.missing_value | escape }}</i>
         {% else %}
           {{ metafield.value }}
         {% endif %}
@@ -41,7 +41,7 @@
 
 <product-compare>
   <label for="product-1-{{ section.id }}">
-    {{ 'product_comparison.product_one' | t }}
+    {{ section.settings.product_one | escape }}
   </label>
   <select id="product-1-{{ section.id }}"></select>
 
@@ -58,6 +58,11 @@
   "name": "Product compare",
   "settings": [
     { "type": "text", "id": "heading", "label": "Heading", "default": "Сравни" },
+    {"type": "text", "id": "product_one", "label": "First product label", "default": "Product 1"},
+    {"type": "text", "id": "criteria_heading", "label": "Criteria heading", "default": "Criteria"},
+    {"type": "text", "id": "error_label", "label": "Error prefix", "default": "Error:"},
+    {"type": "text", "id": "no_criteria", "label": "Missing criteria message", "default": "No comparison criteria configured."},
+    {"type": "text", "id": "missing_value", "label": "Missing value message", "default": "Missing value"},
     {
       "type": "metaobject",
       "id": "criteria_group",
