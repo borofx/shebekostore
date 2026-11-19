@@ -4,7 +4,7 @@
 %}
 
 <section>
-  <h2>{{ section.settings.heading }}</h2>
+  <h2>{{ section.settings.heading | escape }}</h2>
 
   {% if criteria == blank %}
     <p><b>ГРЕШКА:</b> няма избрани критерии</p>
@@ -13,24 +13,24 @@
   <h3>Критерии</h3>
   <ul>
     {% for c in criteria %}
-      <li>{{ c.label.value }} | {{ c.metafield_key.value }} | {{ c.comparison.value }} | {{ c.unit.value }}</li>
+      <li>{{ c.label.value | escape }} | {{ c.metafield_key.value | escape }} | {{ c.comparison.value | escape }} | {{ c.unit.value | escape }}</li>
     {% endfor %}
   </ul>
 
-  <h3>Продукти в {{ collection.title }} ({{ collection.products_count }})</h3>
+  <h3>Продукти в {{ collection.title | escape }} ({{ collection.products_count }})</h3>
   {% for product in collection.products %}
     <p>
-      <b>{{ product.title }}</b> [{{ product.type }}]<br>
+      <b>{{ product.title | escape }}</b> [{{ product.type | escape }}]<br>
       {% for criterion in criteria %}
         {% assign metafield_path = criterion.metafield_key.value | split: '.' %}
         {% assign metafield_namespace = metafield_path[0] %}
         {% assign metafield_key = metafield_path[1] %}
         {% assign metafield = product.metafields[metafield_namespace][metafield_key] %}
-        {{ criterion.label.value }}:
+        {{ criterion.label.value | escape }}:
         {% if metafield == blank %}
           <i>липсва</i>
         {% else %}
-          {{ metafield.value }}
+          {{ metafield.value | escape }}
         {% endif %}
 
         {% unless forloop.last %} · {% endunless %}
