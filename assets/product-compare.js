@@ -19,11 +19,28 @@ class ProductComparison extends HTMLElement {
     const productOneSelect = this.querySelector('select');
     const comparisonDataScript = this.querySelector('script[type="application/json"]');
 
-    if (!productOneSelect || !comparisonDataScript?.textContent) return;
-
-    const comparisonData = JSON.parse(comparisonDataScript.textContent);
+    if (!productOneSelect) return;
 
     productOneSelect.replaceChildren();
+    productOneSelect.disabled = true;
+
+    let comparisonData;
+    try {
+      comparisonData = JSON.parse(comparisonDataScript?.textContent ?? '');
+    } catch {
+      return;
+    }
+
+    if (!Array.isArray(comparisonData?.products)) {
+      return;
+    }
+
+    for (const product of comparisonData.products) {
+      if (!Number.isSafeInteger(product?.id) || typeof product?.title !== 'string') {
+        return;
+      }
+    }
+
     productOneSelect.disabled = comparisonData.products.length === 0;
 
     populateProductSelect(productOneSelect, comparisonData.products);
