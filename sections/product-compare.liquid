@@ -4,33 +4,38 @@
 %}
 
 <section>
-  <h2>{{ section.settings.heading }}</h2>
+  <h2>{{ section.settings.heading | escape }}</h2>
 
   {% if criteria == blank %}
-    <p><b>{{ section.settings.error_label | escape }}</b> {{ section.settings.no_criteria | escape }}</p>
+    <p>
+      <b>{{ section.settings.error_label | escape }}</b> {{ section.settings.no_criteria | escape }}
+    </p>
   {% endif %}
 
   <h3>{{ section.settings.criteria_heading | escape }}</h3>
   <ul>
     {% for c in criteria %}
-      <li>{{ c.label.value }} | {{ c.metafield_key.value }} | {{ c.comparison.value }} | {{ c.unit.value }}</li>
+      <li>
+        {{ c.label.value | escape }} | {{ c.metafield_key.value | escape }} | {{ c.comparison.value | escape }} |
+        {{ c.unit.value | escape }}
+      </li>
     {% endfor %}
   </ul>
 
-  <h3>{{ collection.title }} ({{ collection.products_count }})</h3>
+  <h3>{{ collection.title | escape }} ({{ collection.products_count }})</h3>
   {% for product in collection.products %}
     <p>
-      <b>{{ product.title }}</b> [{{ product.type }}]<br>
+      <b>{{ product.title | escape }}</b> [{{ product.type | escape }}]<br>
       {% for criterion in criteria %}
         {% assign metafield_path = criterion.metafield_key.value | split: '.' %}
         {% assign metafield_namespace = metafield_path[0] %}
         {% assign metafield_key = metafield_path[1] %}
         {% assign metafield = product.metafields[metafield_namespace][metafield_key] %}
-        {{ criterion.label.value }}:
+        {{ criterion.label.value | escape }}:
         {% if metafield == blank %}
           <i>{{ section.settings.missing_value | escape }}</i>
         {% else %}
-          {{ metafield.value }}
+          {{ metafield.value | escape }}
         {% endif %}
 
         {% unless forloop.last %} · {% endunless %}
@@ -40,10 +45,19 @@
 </section>
 
 <product-compare>
+  <label for="product-search-{{ section.id }}">
+    {{ section.settings.search_label | escape }}
+  </label>
+  <input type="search" id="product-search-{{ section.id }}">
   <label for="product-1-{{ section.id }}">
     {{ section.settings.product_one | escape }}
   </label>
+
   <select id="product-1-{{ section.id }}"></select>
+
+  <p data-no-results hidden role="status">
+    {{ section.settings.no_results | escape }}
+  </p>
 
   {% render 'product-comparison-data', section: section, collection: collection, criteria: criteria %}
 </product-compare>
@@ -58,11 +72,23 @@
   "name": "Product compare",
   "settings": [
     { "type": "text", "id": "heading", "label": "Heading", "default": "Сравни" },
-    {"type": "text", "id": "product_one", "label": "First product label", "default": "Product 1"},
-    {"type": "text", "id": "criteria_heading", "label": "Criteria heading", "default": "Criteria"},
-    {"type": "text", "id": "error_label", "label": "Error prefix", "default": "Error:"},
-    {"type": "text", "id": "no_criteria", "label": "Missing criteria message", "default": "No comparison criteria configured."},
-    {"type": "text", "id": "missing_value", "label": "Missing value message", "default": "Missing value"},
+    { "type": "text", "id": "product_one", "label": "First product label", "default": "Product 1" },
+    { "type": "text", "id": "criteria_heading", "label": "Criteria heading", "default": "Criteria" },
+    { "type": "text", "id": "error_label", "label": "Error prefix", "default": "Error:" },
+    {
+      "type": "text",
+      "id": "no_criteria",
+      "label": "Missing criteria message",
+      "default": "No comparison criteria configured."
+    },
+    { "type": "text", "id": "missing_value", "label": "Missing value message", "default": "Missing value" },
+    { "type": "text", "id": "search_label", "label": "Search field label", "default": "Search products by name" },
+    {
+      "type": "text",
+      "id": "no_results",
+      "label": "No search results message",
+      "default": "No products match your search."
+    },
     {
       "type": "metaobject",
       "id": "criteria_group",
