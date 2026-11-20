@@ -1,0 +1,59 @@
+{% liquid
+  assign criteria_group = section.settings.criteria_group
+  assign criteria = criteria_group.criteria.value
+%}
+
+<section>
+  <h2>{{ section.settings.heading | escape }}</h2>
+
+  {% if criteria == blank %}
+    <p><b>ГРЕШКА:</b> няма избрани критерии</p>
+  {% endif %}
+
+  <h3>Критерии</h3>
+  <ul>
+    {% for c in criteria %}
+      <li>{{ c.label.value | escape }} | {{ c.metafield_key.value | escape }} | {{ c.comparison.value | escape }} | {{ c.unit.value | escape }}</li>
+    {% endfor %}
+  </ul>
+
+  <h3>Продукти в {{ collection.title | escape }} ({{ collection.products_count }})</h3>
+  {% for product in collection.products %}
+    <p>
+      <b>{{ product.title | escape }}</b> [{{ product.type | escape }}]<br>
+      {% for criterion in criteria %}
+        {% assign metafield_path = criterion.metafield_key.value | split: '.' %}
+        {% assign metafield_namespace = metafield_path[0] %}
+        {% assign metafield_key = metafield_path[1] %}
+        {% assign metafield = product.metafields[metafield_namespace][metafield_key] %}
+        {{ criterion.label.value | escape }}:
+        {% if metafield == blank %}
+          <i>липсва</i>
+        {% else %}
+          {{ metafield.value | escape }}
+        {% endif %}
+
+        {% unless forloop.last %} · {% endunless %}
+      {% endfor %}
+    </p>
+  {% endfor %}
+</section>
+
+{% render 'product-comparison-data', section: section, collection: collection, criteria: criteria %}
+
+{% schema %}
+{
+  "name": "Product compare",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Сравни" },
+    {
+      "type": "metaobject",
+      "id": "criteria_group",
+      "label": "Comparison criteria group",
+      "metaobject_type": "compare_criteria_group",
+      "info": "Connect the current collection’s Compare criteria group metafield."
+    }
+  ],
+  "presets": [{ "name": "Product compare" }]
+}
+{% endschema %}
