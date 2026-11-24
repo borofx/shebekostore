@@ -59,6 +59,11 @@
     {{ section.settings.no_results | escape }}
   </p>
 
+  <label for="product-2-{{ section.id }}">
+    {{ section.settings.product_two | escape }}
+  </label>
+  <select id="product-2-{{ section.id }}" disabled></select>
+
   {% render 'product-comparison-data', section: section, collection: collection, criteria: criteria %}
 </product-compare>
 
@@ -73,6 +78,7 @@
   "settings": [
     { "type": "text", "id": "heading", "label": "Heading", "default": "Сравни" },
     { "type": "text", "id": "product_one", "label": "First product label", "default": "Product 1" },
+    { "type": "text", "id": "product_two", "label": "Second product label", "default": "Product 2" },
     { "type": "text", "id": "criteria_heading", "label": "Criteria heading", "default": "Criteria" },
     { "type": "text", "id": "error_label", "label": "Error prefix", "default": "Error:" },
     {
