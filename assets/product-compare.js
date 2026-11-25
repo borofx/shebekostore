@@ -64,6 +64,36 @@ class ProductComparison extends HTMLElement {
 
     populateProductSelect(productOneSelect, products);
 
+    const updateProductTwoOptions = () => {
+      const previousProductTwoId = productTwoSelect.value;
+      const selectedProduct = products.find(
+        product => String(product.id) === productOneSelect.value
+      );
+
+      productTwoSelect.replaceChildren();
+      productTwoSelect.disabled = true;
+
+      if (!selectedProduct) return;
+
+      const compatibleProducts = products.filter(
+        product => product.type === selectedProduct.type
+      );
+      populateProductSelect(productTwoSelect, compatibleProducts);
+      const previousSelectionIsValid = compatibleProducts.some(
+        product => String(product.id) === previousProductTwoId
+      );
+
+      if (previousSelectionIsValid) {
+        productTwoSelect.value = previousProductTwoId;
+      } else {
+        productTwoSelect.value = '';
+      }
+
+      productTwoSelect.disabled = compatibleProducts.length === 0;
+    };
+    productOneSelect.onchange = updateProductTwoOptions;
+    updateProductTwoOptions();
+
     productOneSearchInput.oninput = () => {
       const searchQuery = productOneSearchInput.value.trim().toLowerCase();
 
@@ -75,6 +105,7 @@ class ProductComparison extends HTMLElement {
       populateProductSelect(productOneSelect, matchingProducts);
       productOneSelect.disabled = matchingProducts.length === 0;
       noResultsMessage.hidden = (searchQuery === '' || matchingProducts.length > 0);
+      updateProductTwoOptions();
     };
   }
 }
