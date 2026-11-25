@@ -16,13 +16,15 @@ function populateProductSelect(selectElement, products) {
 
 class ProductComparison extends HTMLElement {
   connectedCallback() {
-    const productOneSelect = this.querySelector('select');
+    const productOneSelect = this.querySelector('select[data-product-one]');
+    const productTwoSelect = this.querySelector('select[data-product-two]');
     const comparisonDataScript = this.querySelector('script[type="application/json"]');
     const productOneSearchInput = this.querySelector('input');
     const noResultsMessage = this.querySelector('[data-no-results]');
 
     if (
-      !productOneSelect ||
+      !(productOneSelect instanceof HTMLSelectElement) ||
+      !(productTwoSelect instanceof HTMLSelectElement) ||
       !productOneSearchInput ||
       !(noResultsMessage instanceof HTMLElement)
     ) return;
@@ -30,6 +32,8 @@ class ProductComparison extends HTMLElement {
     noResultsMessage.hidden = true;
     productOneSelect.replaceChildren();
     productOneSelect.disabled = true;
+    productTwoSelect.replaceChildren();
+    productTwoSelect.disabled = true;
     productOneSearchInput.disabled = true;
     productOneSearchInput.oninput = null;
 
@@ -45,12 +49,15 @@ class ProductComparison extends HTMLElement {
     }
 
     for (const product of comparisonData.products) {
-      if (!Number.isSafeInteger(product?.id) || typeof product?.title !== 'string') {
+      if (!Number.isSafeInteger(product?.id) ||
+        typeof product?.title !== 'string' ||
+        typeof product?.type !== 'string'
+      ) {
         return;
       }
     }
 
-    /** @type {Array<{ id: number, title: string }>} */
+    /** @type {Array<{ id: number, title: string, type: string }>} */
     const products = comparisonData.products;
     productOneSearchInput.disabled = false;
     productOneSelect.disabled = products.length === 0;

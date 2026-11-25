@@ -53,7 +53,7 @@
     {{ section.settings.product_one | escape }}
   </label>
 
-  <select id="product-1-{{ section.id }}"></select>
+  <select id="product-1-{{ section.id }}" data-product-one></select>
 
   <p data-no-results hidden role="status">
     {{ section.settings.no_results | escape }}
@@ -62,7 +62,7 @@
   <label for="product-2-{{ section.id }}">
     {{ section.settings.product_two | escape }}
   </label>
-  <select id="product-2-{{ section.id }}" disabled></select>
+  <select id="product-2-{{ section.id }}" data-product-two disabled></select>
 
   {% render 'product-comparison-data', section: section, collection: collection, criteria: criteria %}
 </product-compare>
