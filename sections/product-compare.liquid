@@ -48,14 +48,32 @@
   <label for="product-search-{{ section.id }}">
     {{ section.settings.search_label | escape }}
   </label>
-  <input type="search" id="product-search-{{ section.id }}">
+  <input type="search" id="product-search-{{ section.id }}" data-search-one>
   <label for="product-1-{{ section.id }}">
     {{ section.settings.product_one | escape }}
   </label>
 
-  <select id="product-1-{{ section.id }}"></select>
+  <select id="product-1-{{ section.id }}" data-product-one></select>
 
   <p data-no-results hidden role="status">
+    {{ section.settings.no_results | escape }}
+  </p>
+  <label for="product-search-2-{{ section.id }}">
+    {{ section.settings.search_two_label | escape }}
+  </label>
+  <input
+    type="search"
+    id="product-search-2-{{ section.id }}"
+    data-search-two
+    disabled
+  >
+  <label for="product-2-{{ section.id }}">
+    {{ section.settings.product_two | escape }}
+  </label>
+
+  <select id="product-2-{{ section.id }}" data-product-two disabled></select>
+
+  <p data-no-results-two hidden role="status">
     {{ section.settings.no_results | escape }}
   </p>
 
@@ -73,6 +91,7 @@
   "settings": [
     { "type": "text", "id": "heading", "label": "Heading", "default": "Сравни" },
     { "type": "text", "id": "product_one", "label": "First product label", "default": "Product 1" },
+    { "type": "text", "id": "product_two", "label": "Second product label", "default": "Product 2" },
     { "type": "text", "id": "criteria_heading", "label": "Criteria heading", "default": "Criteria" },
     { "type": "text", "id": "error_label", "label": "Error prefix", "default": "Error:" },
     {
@@ -83,6 +102,12 @@
     },
     { "type": "text", "id": "missing_value", "label": "Missing value message", "default": "Missing value" },
     { "type": "text", "id": "search_label", "label": "Search field label", "default": "Search products by name" },
+    {
+      "type": "text",
+      "id": "search_two_label",
+      "label": "Second product search label",
+      "default": "Search second product by name"
+    },
     {
       "type": "text",
       "id": "no_results",
